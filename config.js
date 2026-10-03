@@ -7,7 +7,7 @@ window.RE_CONFIG = {
   },
   brand: 'Antara Properties',
   tagline: 'Property, handled with clarity.',
-  email: 'parthrathi7@gmail.com',
+  email: 'antaraproperties1@gmail.com',
   phone: '8329788386',
   whatsapp: '918329788386',
   city: 'Amravati & Surrounding Areas',

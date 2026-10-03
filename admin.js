@@ -35,7 +35,7 @@
     const files=[...$('photos').files];if(files.length+photos.length>4)throw new Error('A property can have up to 4 photos. Remove an existing photo or select fewer.');
     const fd=new FormData($('propertyForm')), body={details:{...(current?.details||{})}};
     for(const [name,,type] of [...core,...extra,...privateFields]){const value=String(fd.get(name)||'').trim();if(name.startsWith('detail_')){body.details[name.slice(7)]=value||null;}else body[name]=value?(type==='number'?Number(value):value):null;}
-    if(publish && (!body.title||!body.category||!body.locality||!photos.length&&!files.length))throw new Error('To publish, add a title, property type, locality and at least one photo.');
+    if(publish && (!body.title||!body.category||!body.locality))throw new Error('To publish, add a title, property type, locality.');
     message('Preparing photos…');const compressed=[];for(const f of files)compressed.push(await api.compress(f));
     const id=current?.id||crypto.randomUUID();
     message('Saving property…');const saved=await api.table('properties',current?'?id=eq.'+id:'',{method:current?'PATCH':'POST',auth:true,body:current?body:{...body,id,status:'draft'},headers:{Prefer:'return=representation'}});
