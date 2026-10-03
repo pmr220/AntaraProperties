@@ -1,4 +1,10 @@
 window.RE_CONFIG = {
+  // Public browser credentials. Access is controlled by Supabase grants and RLS.
+  // Never put a secret/service_role key or database password here.
+  supabase: {
+    url: 'https://rtclfaovuahdnegcdonm.supabase.co',
+    publishableKey: 'sb_publishable_kHc-e-0g76UYECQ1EEQdZw_qT27_BL1',
+  },
   brand: 'NOVA ESTATES',
   tagline: 'Property, handled with clarity.',
   email: 'parthrathi7@gmail.com',
