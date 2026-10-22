@@ -3,3 +3,24 @@
 @media(max-width:760px){.ap-header{height:84px;padding:0 6%}.ap-header-contact{display:none}.ap-wordmark{font-size:20px}.ap-menu-button svg{width:38px}.ap-home{min-height:calc(100svh - 84px)}.ap-hero-content{padding:40px 15px 120px}.ap-hero-content h1{font-size:clamp(48px,13vw,100px);letter-spacing:.08em;padding-left:.08em}.ap-hero-content h1 span{font-size:12px;margin-top:20px;letter-spacing:.5em}.ap-hero-content .ap-kicker{font-size:8px}.ap-signature{font-size:21px}.ap-hero-image{object-position:60% 50%}.ap-hero-bottom{left:6%;right:6%;bottom:35px;align-items:start}.ap-hero-bottom p{font-size:10px;max-width:120px}.ap-hero-cta{min-width:0;gap:22px;font-size:11px;padding-top:0}.ap-page,.ap-site .shell{padding:40px 6% 55px}.ap-page-heading{margin-bottom:30px;padding-bottom:25px}.ap-page-heading h1,.ap-site .shell h1{font-size:40px}.ap-kicker{font-size:9px;margin-bottom:22px}.ap-contact-grid,.ap-editorial,.ap-seller-layout{grid-template-columns:1fr;gap:35px}.ap-form-panel{padding:22px}.ap-editorial img{height:320px}.ap-seller-layout aside{max-width:none}.ap-contact-info address{font-size:16px}.ap-contact-links a{font-size:13px}.ap-footer{flex-direction:column;gap:12px;padding:25px 6%;font-size:10px}.ap-menu{padding:24px 7%}.ap-menu nav{gap:13px}.ap-menu nav a{font-size:35px}.ap-menu-bottom{font-size:8px}.form-grid{gap:16px}.ap-site .catalogue{grid-template-columns:1fr}}@media(max-width:400px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.ap-menu nav a{font-size:30px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 .ap-site .success{color:#435937!important}
+
+/* Homepage branding: readable over both light and dark parts of the image. */
+.ap-home{max-height:none;min-height:max(580px,calc(100svh - 104px))}
+.ap-hero-shade{background:linear-gradient(180deg,rgba(16,22,18,.42),rgba(16,22,18,.58) 48%,rgba(16,22,18,.74)),radial-gradient(ellipse at center,rgba(16,22,18,.22),transparent 75%)}
+.ap-hero-content{width:100%;padding:65px 6% 150px;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.ap-hero-content h1{font-weight:500;font-size:clamp(64px,10.5vw,150px);line-height:1.1;letter-spacing:.07em;padding-left:.07em}
+.ap-hero-content h1 span{font-weight:500;font-size:clamp(17px,2vw,28px);line-height:1.5;letter-spacing:.32em;padding-left:.32em;margin-top:16px}
+.ap-hero-content .ap-kicker{font-size:11px;letter-spacing:.16em;line-height:1.6;margin-bottom:28px}
+.ap-signature{font:400 clamp(21px,2.2vw,30px)/1.5 'DM Sans',Arial,sans-serif;letter-spacing:.02em;margin-top:22px}
+.ap-hero-bottom p,.ap-hero-cta{font-size:14px;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+@media(max-width:760px){
+  .ap-home{min-height:max(540px,calc(100svh - 84px))}
+  .ap-hero-content{padding:50px 6% 145px}
+  .ap-hero-content h1{font-size:clamp(40px,11.8vw,88px);letter-spacing:.05em;padding-left:.05em}
+  .ap-hero-content h1 span{font-size:clamp(16px,4.2vw,23px);letter-spacing:.26em;padding-left:.26em;margin-top:12px}
+  .ap-hero-content .ap-kicker{font-size:10px;letter-spacing:.12em;margin-bottom:22px}
+  .ap-signature{font-size:22px;margin-top:20px}
+  .ap-hero-bottom p,.ap-hero-cta{font-size:12px}
+  .ap-hero-bottom{gap:16px}
+  .ap-hero-cta{gap:16px}
+}
