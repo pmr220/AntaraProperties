@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sellForm?.addEventListener('submit', async e => {
     e.preventDefault();
     const files=[...(photoInput?.files||[])].slice(0,8);
-    if(files.length<3){ if(sellStatus){sellStatus.style.display='block';sellStatus.textContent='Please upload at least 3 property photos.';sellStatus.style.color='#f5d0cb'} return; }
+    if (!sellForm.reportValidity()) return;
     const btn=document.querySelector('#sellSubmit'); const original=btn?.textContent; if(btn){btn.disabled=true;btn.textContent='Preparing submission…'}
     try{
       const fd=new FormData(sellForm); const item=Object.fromEntries(fd.entries());
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
       for(const file of files) item.photos.push(await compressImage(file));
       const key='nova_pending_submissions'; let pending=[]; try{pending=JSON.parse(localStorage.getItem(key)||'[]')}catch{}
       pending.unshift(item); localStorage.setItem(key, JSON.stringify(pending));
-      if(sellStatus){sellStatus.style.display='block';sellStatus.style.color='#d7f1d8';sellStatus.textContent='Submitted successfully. Your property is now waiting for admin review.'}
+      if(sellStatus){sellStatus.style.display='block';sellStatus.style.color='#d7f1d8';sellStatus.textContent='Saved in this browser only. Please contact us on WhatsApp to send your property details to Antara Properties.'}
       sellForm.reset(); if(photoPreview) photoPreview.innerHTML='';
     }catch(err){
       if(sellStatus){sellStatus.style.display='block';sellStatus.style.color='#f5d0cb';sellStatus.textContent='Could not save the submission in this browser. Please use WhatsApp instead.'}
