@@ -2,7 +2,7 @@
   const api=window.Antara, $=id=>document.getElementById(id);
   const categories={plot:'Plot',farm:'Farm / Farm land',row_house:'Row house',shop_space:'Shop Space',flat:'Flat',villa:'Villa',independent_house:'Independent house',commercial:'Commercial',builder_project:'Builder project',other:'Other'};
   const core=[['title','Property title'],['category','Property type',categories],['transaction_type','For',{sale:'Sale',rent:'Rent',lease:'Lease'}],['locality','Locality / area'],['city','City'],['asking_price','Total price (₹)','number'],['rate','Rate (₹)','number'],['rate_unit','Rate per',{ 'sq.ft':'sq. ft.','sq.m':'sq. m.',acre:'Acre',hectare:'Hectare',month:'Month'}],['land_area','Plot / land area','number'],['land_area_unit','Area unit',{'sq.ft':'sq. ft.','sq.m':'sq. m.',acre:'Acre',hectare:'Hectare'}],['description','Public description','textarea']];
-  const extra=[['village','Village'],['address','Full address (private)'],['landmark','Landmark'],['carpet_area','Carpet area','number'],['carpet_area_unit','Carpet area unit'],['built_up_area','Built-up area','number'],['built_up_area_unit','Built-up area unit'],['deposit','Deposit (₹)','number'],['map_url','Map link','url']];
+  const extra=[['village','Village'],['address','Full address (private)'],['landmark','Landmark'],['carpet_area','Carpet area','number'],['carpet_area_unit','Carpet area unit'],['built_up_area','Built-up area','number'],['built_up_area_unit','Built-up area unit'],['deposit','Deposit (₹)','number'],['map_url','Google Maps location (optional)','url']];
   const detailNames=['dimensions','dimensions_unit','road_width','road_width_unit','frontage','facing','access_road','water_source','electricity','land_use','survey_number','ownership_type','title_notes','bedrooms','bathrooms','balconies','floor_number','total_floors','parking_spaces','furnishing','property_age','construction_stage','builder_name','project_name','unit_types','possession_date','registration_number'];
   detailNames.forEach(name=>extra.push(['detail_'+name,name.replaceAll('_',' ')]));
   const privateFields=[['owner_name','Owner name'],['owner_phone','Owner phone','tel'],['owner_email','Owner email','email'],['owner_expected_price','Owner expected price (₹)','number'],['commission_notes','Commission notes','textarea'],['internal_notes','Internal notes','textarea']];
@@ -10,7 +10,7 @@
   function field([name,label,type]) {
     const wrap=document.createElement('label');wrap.textContent=label;
     const input=document.createElement(typeof type==='object'?'select':type==='textarea'?'textarea':'input');
-    input.name=name;
+    input.name=name;if(name==='map_url'){input.placeholder='Paste the Google Maps share link';const help=document.createElement('small');help.textContent='Optional. Google Maps → Share → Copy link. This location becomes public when you Save & publish.';wrap.append(help);}
     if(typeof type==='object') {input.add(new Option('Select (optional)',''));Object.entries(type).forEach(([value,text])=>input.add(new Option(text,value)));}
     else if(type && type!=='textarea') {input.type=type;if(type==='number'){input.min='0';input.step='any';}}
     if(input.tagName!=='SELECT') input.maxLength=type==='textarea'?5000:500;
@@ -35,6 +35,7 @@
     const files=[...$('photos').files];if(files.length+photos.length>4)throw new Error('A property can have up to 4 photos. Remove an existing photo or select fewer.');
     const fd=new FormData($('propertyForm')), body={details:{...(current?.details||{})}};
     for(const [name,,type] of [...core,...extra,...privateFields]){const value=String(fd.get(name)||'').trim();if(name.startsWith('detail_')){body.details[name.slice(7)]=value||null;}else body[name]=value?(type==='number'?Number(value):value):null;}
+    if(body.map_url&&!window.AntaraMapLink(body.map_url))throw new Error('Paste a valid HTTPS Google Maps share link, or leave the location blank.');
     if(publish && (!body.title||!body.category||!body.locality))throw new Error('To publish, add a title, property type, locality.');
     message('Preparing photos…');const compressed=[];for(const f of files)compressed.push(await api.compress(f));
     const id=current?.id||crypto.randomUUID();
