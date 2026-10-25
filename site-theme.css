@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap');
+.ap-faq{margin-top:64px;padding-top:38px;border-top:1px solid var(--ap-line)}.ap-faq>h2{max-width:720px}.ap-faq-intro{color:#62665c;font-size:14px;margin-bottom:28px}.ap-faq details{border-top:1px solid var(--ap-line);padding:0}.ap-faq summary{cursor:pointer;padding:18px 26px 18px 0;font-size:15px;font-weight:500;line-height:1.5}.ap-faq details p{max-width:850px;font-size:14px;line-height:1.85;margin:0 0 22px;color:#53594d}.ap-faq-links{display:flex;flex-wrap:wrap;gap:18px 28px;margin-top:28px;font-size:13px}.ap-faq-links a{border-bottom:1px solid #8e9881;padding-bottom:5px}@media(max-width:760px){.ap-faq{margin-top:40px;padding-top:28px}.ap-faq summary{font-size:14px}}
+.ap-page .ap-about-heading h1{font-size:clamp(24px,3vw,36px);letter-spacing:-.025em;margin:0 0 12px}
+.ap-page .ap-about-heading p{margin-top:12px}
 .ap-site .ap-footer a.site-credit{font-size:11px;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .ap-about-profile{align-items:center}
 .ap-about-profile figure{width:100%;max-width:480px;justify-self:center}

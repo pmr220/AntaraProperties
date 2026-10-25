@@ -1,12 +1,11 @@
 .home-sections{max-width:1350px;margin:auto;padding:48px 5% 60px;color:var(--ap-ink);display:grid;gap:24px}
 .home-offer{padding:34px 38px;background:#f8f6f0;border:1px solid #dcd8cc;border-radius:4px;overflow:hidden}
-.home-project{box-shadow:0 8px 30px #34372e06}.home-sell{background:#e2e5da;border-color:#ced4c3}
+.home-project{box-shadow:0 8px 30px #34372e06}
 .home-project{display:grid;grid-template-columns:230px 1fr;gap:38px;align-items:center}
 .home-project figure{margin:0;padding:12px;background:#eae4d8;border:1px solid #ddd4c5}.home-project img{display:block;width:100%;height:auto;max-height:280px;object-fit:contain}.home-project figcaption{font-size:10px;color:var(--ap-muted);margin-top:7px}
 .home-offer .ap-kicker{margin-bottom:12px}.home-offer h2{font:400 clamp(25px,3vw,36px)/1.2 'Manrope',sans-serif;letter-spacing:-.035em;margin:0 0 12px}
 .home-offer p{font-size:14px;line-height:1.7;margin:0 0 16px}.home-offer .home-address{color:#62665c;font-size:13px}
 .home-features{display:flex;flex-wrap:wrap;gap:8px 20px;list-style:none;padding:0;margin:18px 0 22px;font-size:12px;color:#535b4d}.home-features li{padding:5px 10px;background:#eeeee5;border:1px solid #dedfd3;border-radius:3px}.home-features li::before{content:'·';margin-right:7px;color:#7d866f}
-.home-buy{background:linear-gradient(115deg,#29342d,#35443a);border-color:#35443a;color:#f5f2e9}.home-buy .ap-kicker{color:#c6cfbc}.home-buy>p:not(.ap-kicker){color:#d7ddd2}.home-buy .home-features{color:#edf0e7}.home-buy .home-features li{background:#ffffff08;border-color:#ffffff26}.home-buy .home-features li::before{color:#bfcca9}.ap-site .home-buy .btn{color:#f5f2e9;border-color:#b8c3ae}.ap-site .home-buy .btn-primary{background:#eeece3;color:#28342c;border-color:#eeece3}.home-sell .ap-kicker{color:#59634d}
 .home-actions{display:flex;gap:12px;flex-wrap:wrap}.home-actions .btn{min-height:44px}
 .home-sell{display:flex;justify-content:space-between;align-items:center;gap:30px}.home-sell p{margin-bottom:0}.home-sell .btn{flex-shrink:0}
 .home-enquiry{width:min(460px,calc(100% - 32px));max-height:calc(100dvh - 40px);overflow:auto;border:1px solid var(--ap-line);padding:28px;background:var(--ap-paper);color:var(--ap-ink)}
