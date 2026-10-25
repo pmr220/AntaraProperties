@@ -105,55 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  // Seller submission workflow (static/demo data layer; replace with API/backend for production).
-  const sellForm = document.querySelector('#sellPropertyForm');
-  const photoInput = document.querySelector('#propertyPhotos');
-  const photoPreview = document.querySelector('#photoPreview');
-  const sellStatus = document.querySelector('#sellStatus');
-  const compressImage = (file, maxW=1400, quality=.76) => new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const scale = Math.min(1, maxW / img.width);
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.max(1, Math.round(img.width*scale));
-        canvas.height = Math.max(1, Math.round(img.height*scale));
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.onerror=reject; img.src=reader.result;
-    };
-    reader.onerror=reject; reader.readAsDataURL(file);
-  });
-  photoInput?.addEventListener('change', () => {
-    if (!photoPreview) return;
-    photoPreview.innerHTML='';
-    [...photoInput.files].slice(0,8).forEach(file => {
-      const box=document.createElement('div'); box.className='upload-thumb';
-      const img=document.createElement('img'); img.alt='Property photo'; img.src=URL.createObjectURL(file);
-      box.appendChild(img); photoPreview.appendChild(box);
-    });
-  });
-  sellForm?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const files=[...(photoInput?.files||[])].slice(0,8);
-    if (!sellForm.reportValidity()) return;
-    const btn=document.querySelector('#sellSubmit'); const original=btn?.textContent; if(btn){btn.disabled=true;btn.textContent='Preparing submission…'}
-    try{
-      const fd=new FormData(sellForm); const item=Object.fromEntries(fd.entries());
-      item.id='PROP-'+Date.now().toString(36).toUpperCase(); item.created_at=new Date().toISOString(); item.photos=[];
-      for(const file of files) item.photos.push(await compressImage(file));
-      const key='nova_pending_submissions'; let pending=[]; try{pending=JSON.parse(localStorage.getItem(key)||'[]')}catch{}
-      pending.unshift(item); localStorage.setItem(key, JSON.stringify(pending));
-      if(sellStatus){sellStatus.style.display='block';sellStatus.style.color='#d7f1d8';sellStatus.textContent='Saved in this browser only. Please contact us on WhatsApp to send your property details to Antara Properties.'}
-      sellForm.reset(); if(photoPreview) photoPreview.innerHTML='';
-    }catch(err){
-      if(sellStatus){sellStatus.style.display='block';sellStatus.style.color='#f5d0cb';sellStatus.textContent='Could not save the submission in this browser. Please use WhatsApp instead.'}
-    }finally{if(btn){btn.disabled=false;btn.textContent=original}}
-  });
-
   // Pull approved seller listings into the existing property filters.
   const published = (()=>{try{return JSON.parse(localStorage.getItem('nova_published_properties')||'[]')}catch{return[]}})();
   const listingWrap=document.querySelector('.property-listing-wrap');
