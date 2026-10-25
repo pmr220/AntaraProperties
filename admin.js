@@ -1,8 +1,8 @@
 (() => {
   const api=window.Antara, $=id=>document.getElementById(id);
   const categories={plot:'Plot',farm:'Farm / Farm land',row_house:'Row house',shop_space:'Shop Space',flat:'Flat',villa:'Villa',independent_house:'Independent house',commercial:'Commercial',builder_project:'Builder project',other:'Other'};
-  const core=[['title','Property title'],['category','Property type',categories],['transaction_type','For',{sale:'Sale',rent:'Rent',lease:'Lease'}],['locality','Locality / area'],['city','City'],['asking_price','Total price (₹)','number'],['rate','Rate (₹)','number'],['rate_unit','Rate per',{ 'sq.ft':'sq. ft.','sq.m':'sq. m.',acre:'Acre',hectare:'Hectare',month:'Month'}],['land_area','Plot / land area','number'],['land_area_unit','Area unit',{'sq.ft':'sq. ft.','sq.m':'sq. m.',acre:'Acre',hectare:'Hectare'}],['description','Public description','textarea']];
-  const extra=[['village','Village'],['address','Full address (private)'],['landmark','Landmark'],['carpet_area','Carpet area','number'],['carpet_area_unit','Carpet area unit'],['built_up_area','Built-up area','number'],['built_up_area_unit','Built-up area unit'],['deposit','Deposit (₹)','number'],['map_url','Google Maps location (optional)','url']];
+  const core=[['title','Property title'],['category','Property type',categories],['transaction_type','For',{sale:'Sale',rent:'Rent',lease:'Lease'}],['locality','Locality / area'],['city','City'],['map_url','Google Maps location (optional)','url'],['asking_price','Total price (₹)','number'],['rate','Rate (₹)','number'],['rate_unit','Rate per',{ 'sq.ft':'sq. ft.','sq.m':'sq. m.',acre:'Acre',hectare:'Hectare',month:'Month'}],['land_area','Plot / land area','number'],['land_area_unit','Area unit',{'sq.ft':'sq. ft.','sq.m':'sq. m.',acre:'Acre',hectare:'Hectare'}],['description','Public description','textarea']];
+  const extra=[['village','Village'],['address','Full address (private)'],['landmark','Landmark'],['carpet_area','Carpet area','number'],['carpet_area_unit','Carpet area unit'],['built_up_area','Built-up area','number'],['built_up_area_unit','Built-up area unit'],['deposit','Deposit (₹)','number']];
   const detailNames=['dimensions','dimensions_unit','road_width','road_width_unit','frontage','facing','access_road','water_source','electricity','land_use','survey_number','ownership_type','title_notes','bedrooms','bathrooms','balconies','floor_number','total_floors','parking_spaces','furnishing','property_age','construction_stage','builder_name','project_name','unit_types','possession_date','registration_number'];
   detailNames.forEach(name=>extra.push(['detail_'+name,name.replaceAll('_',' ')]));
   const privateFields=[['owner_name','Owner name'],['owner_phone','Owner phone','tel'],['owner_email','Owner email','email'],['owner_expected_price','Owner expected price (₹)','number'],['commission_notes','Commission notes','textarea'],['internal_notes','Internal notes','textarea']];
@@ -22,8 +22,17 @@
   function show(tab){['inventory','editor','enquiries'].forEach(t=>$(t).hidden=t!==tab);document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('selected',b.dataset.tab===tab));}
   function leave(){return !dirty || window.confirm('Leave without saving your changes?');}
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
-  $('propertyForm').addEventListener('input',()=>dirty=true);
-  function clearEditor(record=null){current=record;photos=[];$('propertyForm').reset();$('photoPreview').replaceChildren();$('editorTitle').textContent=record?'Edit property':'Add a property';const form=$('propertyForm');form.elements.category.querySelector('[data-legacy]')?.remove();if(record?.category==='unfinished_house'){const legacy=new Option('House (existing category)','unfinished_house');legacy.dataset.legacy='true';form.elements.category.add(legacy);}for(const el of form.elements){if(el.name && el.name!=='action'){el.value=el.name.startsWith('detail_')?(record?.details?.[el.name.slice(7)]??''):(record?.[el.name]??'');}}if(!record){form.elements.city.value='Amravati';form.elements.transaction_type.value='sale';}dirty=false;}
+  let lastAutoPrice=null;
+  const updatePrice=event=>{
+    if(!['rate','land_area','rate_unit','land_area_unit'].includes(event.target.name))return;
+    const f=$('propertyForm').elements;
+    const total=window.AntaraTotalPrice(f.rate.value,f.land_area.value,f.rate_unit.value,f.land_area_unit.value);
+    if(total!==null){f.asking_price.value=String(total);lastAutoPrice=String(total);}
+    else if(lastAutoPrice!==null&&f.asking_price.value===lastAutoPrice){f.asking_price.value='';lastAutoPrice=null;}
+  };
+  $('propertyForm').addEventListener('input',event=>{dirty=true;updatePrice(event);});
+  $('propertyForm').addEventListener('change',updatePrice);
+  function clearEditor(record=null){lastAutoPrice=null;current=record;photos=[];$('propertyForm').reset();$('photoPreview').replaceChildren();$('editorTitle').textContent=record?'Edit property':'Add a property';const form=$('propertyForm');form.elements.category.querySelector('[data-legacy]')?.remove();if(record?.category==='unfinished_house'){const legacy=new Option('House (existing category)','unfinished_house');legacy.dataset.legacy='true';form.elements.category.add(legacy);}for(const el of form.elements){if(el.name && el.name!=='action'){el.value=el.name.startsWith('detail_')?(record?.details?.[el.name.slice(7)]??''):(record?.[el.name]??'');}}if(!record){form.elements.city.value='Amravati';form.elements.transaction_type.value='sale';form.elements.rate_unit.value='sq.ft';form.elements.land_area_unit.value='sq.ft';}dirty=false;}
   function line(parent,text,tag='p'){const el=document.createElement(tag);el.textContent=text;parent.append(el);return el;}
   function button(parent,text,fn){const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',()=>task(fn));parent.append(b);return b;}
   async function loadInventory(){records=await api.table('properties','?select=*&order=created_at.desc',{auth:true});$('count').textContent='('+records.length+')';$('propertyList').replaceChildren();if(!records.length)line($('propertyList'),'No properties yet. Choose Add Property to start.');for(const p of records){const card=document.createElement('article');card.className='record';line(card,p.status,'span').className='badge';line(card,p.title||'Untitled draft','h3');line(card,[p.reference,categories[p.category],p.locality].filter(Boolean).join(' · '));const actions=document.createElement('div');actions.className='actions';button(actions,'Edit',async()=>{clearEditor(p);await loadPhotos();show('editor');});if(p.status==='published'){button(actions,'Hide',()=>setStatus(p,'hidden'));button(actions,'Mark sold',()=>setStatus(p,'sold'));}card.append(actions);$('propertyList').append(card);}}
@@ -48,7 +57,18 @@
       catch(error){try{await api.request('/storage/v1/object/property-photos',{method:'DELETE',auth:true,body:{prefixes:[path]}});}catch{/* orphan cleanup recorded in setup guide */}throw error;}
     }
     $('photos').value='';dirty=false;await drawPhotos();
-    if(publish)await api.request('/rest/v1/rpc/antara_publish_property',{method:'POST',auth:true,body:{target_id:id}});
+    if(publish){
+      await api.request('/rest/v1/rpc/antara_publish_property',{method:'POST',auth:true,body:{target_id:id}});
+      // Also sync the explicitly public map link for projects still using an older publish RPC.
+      const listings=await api.table('property_listings','?property_id=eq.'+id+'&select=display_details',{auth:true});
+      if(!listings.length)throw new Error('The published listing could not be verified. Please retry Save & publish.');
+      const details={...(listings[0].display_details||{})};
+      const mapUrl=window.AntaraMapLink(body.map_url);
+      if((details.map_url||null)!==mapUrl){
+        if(mapUrl)details.map_url=mapUrl;else delete details.map_url;
+        await api.table('property_listings','?property_id=eq.'+id,{method:'PATCH',auth:true,body:{display_details:details}});
+      }
+    }
     message(publish?'Published. This property is now on the website.':'Saved. Use Save & publish when the listing is ready.');await loadInventory();show('inventory');
   }
   $('propertyForm').addEventListener('submit',e=>{e.preventDefault();task(async()=>{try{await save(e.submitter?.value==='publish');}catch(error){$('photos').value='';if(current)await loadPhotos();throw new Error(error.message+' Your saved record is retained; reselect any photos that did not upload.');}});});
