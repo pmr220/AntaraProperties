@@ -1,7 +1,7 @@
 (() => {
   const api=window.Antara,$=id=>document.getElementById(id);
-  const categories={all:'All',plot:'Plots',farm:'Farms',row_house:'Row houses',unfinished_house:'Raw houses',flat:'Flats',villa:'Villas',independent_house:'Independent houses',commercial:'Commercial',builder_project:'Builder projects',other:'Other'};
-  const aliases={plots:'plot',farms:'farm',flats:'flat',raw:'unfinished_house','raw-houses':'unfinished_house',villas:'villa'};
+  const categories={all:'All',plot:'Plots',farm:'Farms',row_house:'Row houses',shop_space:'Shop Space',flat:'Flats',villa:'Villas',independent_house:'Independent houses',commercial:'Commercial',builder_project:'Builder projects',other:'Other'};
+  const aliases={plots:'plot',farms:'farm',flats:'flat',shops:'shop_space','shop-space':'shop_space',villas:'villa'};
   const initial=location.hash.slice(1);let filter=aliases[initial]|| (categories[initial]?initial:'all'), rows=[],photos=[],generation=0;
   function text(parent,tag,value,className){const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;parent.append(el);return el;}
   const money=value=>value==null?'Price on request':'₹ '+Number(value).toLocaleString('en-IN');
