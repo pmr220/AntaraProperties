@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap');
+.ap-site .ap-footer a.site-credit{font-size:11px;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.ap-about-profile{align-items:center}
+.ap-about-profile figure{width:100%;max-width:480px;justify-self:center}
+.ap-about-profile figure img{display:block;width:100%;height:auto;object-fit:contain;filter:none}
 .ap-site a.whatsapp,.ap-site a.whatsapp:visited{color:#fff}
 .ap-site a.whatsapp:hover,.ap-site a.whatsapp:focus-visible{color:#fff;background:#1e251a}
 .ap-footer{flex-wrap:wrap}.site-credit{white-space:nowrap}
